@@ -1,0 +1,112 @@
+/* ==========================================================================
+   SN4M - Foglio di stile personalizzato
+   ========================================================================== */
+
+/* Stile generale della pagina e sfondo */
+body {
+    background-color: #f4f6f8 !important;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Stile della navbar e dell'avatar in alto a destra */
+.navbar {
+    background-color: #121212 !important;
+}
+
+.avatar-circle {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    background-color: #1DB954; /* Verde Spotify */
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/* Menu a comparsa per le opzioni del profilo */
+.profile-dropdown {
+    position: absolute;
+    top: 48px;
+    right: 0;
+    width: 290px;
+    background: white;
+    border-radius: 12px;
+    padding: 16px;
+    z-index: 1050;
+    border: 1px solid #ddd;
+}
+
+/* Griglia per le checkbox dei generi musicali */
+.checkbox-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 6px;
+    background: #f8f9fa;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #eee;
+}
+
+.checkbox-item {
+    font-size: 0.8em;
+    cursor: pointer;
+    margin: 0;
+}
+
+.checkbox-item input[type="checkbox"] {
+    accent-color: #1DB954;
+}
+
+/* Badge per gli artisti consigliati */
+.suggestions-box {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+}
+
+.artist-tag {
+    background-color: #e8f5e9;
+    color: #1DB954;
+    border: 1px solid #1DB954;
+    border-radius: 12px;
+    padding: 2px 8px;
+    font-size: 0.75em;
+    cursor: pointer;
+    font-weight: bold;
+}
+
+.artist-tag:hover {
+    background-color: #1DB954;
+    color: white;
+}
+
+/* Personalizzazione dei pulsanti con stile Spotify */
+.btn-success {
+    background-color: #1DB954 !important;
+    border-color: #1DB954 !important;
+}
+
+.btn-success:hover {
+    background-color: #1aa34a !important;
+}
+
+/* Contenitori per le playlist condivise e i commenti */
+.shared-card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 12px;
+    margin-bottom: 12px;
+}
+
+.comment-item {
+    background-color: #f8f9fa;
+    border-left: 3px solid #1DB954;
+    padding: 4px 8px;
+    margin-top: 4px;
+    border-radius: 4px;
+    font-size: 0.85em;
+}

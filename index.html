@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="it">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- Meta tag per far vedere bene la pagina anche sui telefoni -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SN4M - Social Network for Music</title>
+    <!-- Importiamo Bootstrap per avere la griglia e la grafica base già fatte -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Il nostro foglio di stile per cambiare un po' i colori -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="bg-light">
+
+    <!-- BARRA DI NAVIGAZIONE IN ALTO -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm px-4">
+        <div class="container-fluid">
+            <!-- Nome dell'app in verde -->
+            <a class="navbar-brand fw-bold text-success fs-4" href="#">SN4M</a>
+
+            <!-- ZONA PROFILO UTENTE -->
+            <!-- Questo pezzo è nascosto all'inizio (display: none). Lo mostriamo con JS solo quando facciamo il login -->
+            <div id="user-menu-container" class="d-flex align-items-center gap-3" style="display: none !important;">
+                <div class="position-relative">
+                    <!-- Il tondino con l'iniziale dell'utente in alto a destra -->
+                    <div id="avatar-btn" class="avatar-circle" title="Apri Profilo">
+                        <span id="avatar-initial">U</span>
+                    </div>
+
+                    <!-- MENU A TENDINA: Si apre cliccando sull'avatar -->
+                    <div id="profile-dropdown" class="profile-dropdown shadow" style="display: none;">
+                        <h5 class="fw-bold mb-3">Il Mio Profilo</h5>
+                        <!-- Qui dentro JS ci scriverà il nome e i generi scelti -->
+                        <div id="profile-info" class="mb-3"></div>
+                        <hr>
+                        <h6 class="fw-bold">Modifica Preferenze</h6>
+
+                        <!-- Checkbox per i generi preferiti -->
+                        <div class="mb-3">
+                            <label class="form-label text-muted small">Generi Preferiti</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-item"><input type="checkbox" name="edit-genere" value="Rap">
+                                    Rap</label>
+                                <label class="checkbox-item"><input type="checkbox" name="edit-genere" value="Trap">
+                                    Trap</label>
+                                <label class="checkbox-item"><input type="checkbox" name="edit-genere" value="Rock">
+                                    Rock</label>
+                                <label class="checkbox-item"><input type="checkbox" name="edit-genere" value="Pop">
+                                    Pop</label>
+                                <label class="checkbox-item"><input type="checkbox" name="edit-genere" value="Hip Hop">
+                                    Hip Hop</label>
+                                <label class="checkbox-item"><input type="checkbox" name="edit-genere" value="Classica">
+                                    Classica</label>
+                                <label class="checkbox-item"><input type="checkbox" name="edit-genere"
+                                        value="Electronic"> Electronic</label>
+                                <label class="checkbox-item"><input type="checkbox" name="edit-genere" value="Indie">
+                                    Indie</label>
+                            </div>
+
+                            <!-- Casella di testo per gli artisti e spazio per i bottoncini suggeriti -->
+                            <label for="edit-artisti" class="form-label text-muted small mt-2">Artisti Preferiti</label>
+                            <input type="text" id="edit-artisti" class="form-control form-control-sm"
+                                placeholder="Nuovi artisti preferiti">
+                            <div id="edit-artisti-suggeriti-container" class="suggestions-box"></div>
+                        </div>
+
+                        <!-- Bottoni per gestire l'account -->
+                        <div class="d-grid gap-2">
+                            <button id="btn-update-profile" class="btn btn-secondary btn-sm">Aggiorna Profilo</button>
+                            <button id="btn-logout" class="btn btn-outline-danger btn-sm">Logout</button>
+                            <button id="btn-delete-account" class="btn btn-danger btn-sm">Elimina Account</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- SCHERMATA INIZIALE: LOGIN E REGISTRAZIONE -->
+    <!-- Questo div si vede solo se l'utente non è loggato -->
+    <div id="auth-section" class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card border-0 shadow-sm rounded-4 p-4">
+
+                    <!-- SCHERMATA LOGIN -->
+                    <div id="login-box">
+                        <h3 class="fw-bold mb-3 text-center">Accedi a SN4M</h3>
+                        <div class="mb-3">
+                            <label for="login-email" class="form-label fw-semibold">Email</label>
+                            <input type="email" id="login-email" class="form-control" placeholder="esempio@email.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="login-password" class="form-label fw-semibold">Password</label>
+                            <input type="password" id="login-password" class="form-control"
+                                placeholder="Inserisci la password">
+                        </div>
+                        <button id="btn-login" class="btn btn-success w-100 fw-bold py-2">Accedi</button>
+                        <p class="text-center mt-3 mb-0 small">Non hai un account? <a href="#"
+                                id="go-to-register">Registrati qui</a></p>
+                    </div>
+
+                    <!-- SCHERMATA REGISTRAZIONE -->
+                    <div id="register-box" style="display: none;">
+                        <h3 class="fw-bold mb-3 text-center">Registrazione</h3>
+                        <div class="mb-3">
+                            <label for="reg-username" class="form-label fw-semibold">Nome Utente</label>
+                            <input type="text" id="reg-username" class="form-control" placeholder="Nome utente">
+                        </div>
+                        <div class="mb-3">
+                            <label for="reg-email" class="form-label fw-semibold">Email</label>
+                            <input type="email" id="reg-email" class="form-control" placeholder="esempio@email.com">
+                        </div>
+                        <div class="mb-3">
+                            <label for="reg-password" class="form-label fw-semibold">Password</label>
+                            <input type="password" id="reg-password" class="form-control"
+                                placeholder="Scegli una password">
+                        </div>
+
+                        <!-- Generi musicali per la registrazione -->
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Generi Preferiti</label>
+                            <div class="checkbox-grid">
+                                <label class="checkbox-item"><input type="checkbox" name="reg-genere" value="Rap">
+                                    Rap</label>
+                                <label class="checkbox-item"><input type="checkbox" name="reg-genere" value="Trap">
+                                    Trap</label>
+                                <label class="checkbox-item"><input type="checkbox" name="reg-genere" value="Rock">
+                                    Rock</label>
+                                <label class="checkbox-item"><input type="checkbox" name="reg-genere" value="Pop">
+                                    Pop</label>
+                                <label class="checkbox-item"><input type="checkbox" name="reg-genere" value="Hip Hop">
+                                    Hip Hop</label>
+                                <label class="checkbox-item"><input type="checkbox" name="reg-genere" value="Classica">
+                                    Classica</label>
+                                <label class="checkbox-item"><input type="checkbox" name="reg-genere"
+                                        value="Electronic"> Electronic</label>
+                                <label class="checkbox-item"><input type="checkbox" name="reg-genere" value="Indie">
+                                    Indie</label>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="reg-artisti" class="form-label fw-semibold">Artisti Preferiti</label>
+                            <input type="text" id="reg-artisti" class="form-control" placeholder="Artisti preferiti">
+                            <div id="artisti-suggeriti-container" class="suggestions-box mt-2"></div>
+                        </div>
+                        <button id="btn-register" class="btn btn-success w-100 fw-bold py-2">Registrati</button>
+                        <p class="text-center mt-3 mb-0 small">Hai già un account? <a href="#" id="go-to-login">Accedi
+                                qui</a></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCHERMATA PRINCIPALE (DASHBOARD) -->
+    <!-- Nascosta all'inizio, JS la mostra dopo aver fatto il login -->
+    <div id="app-content" class="container-fluid py-4 px-lg-5" style="display: none;">
+        <!-- Usiamo la row di Bootstrap per dividere lo schermo in 3 colonne grandi uguali -->
+        <div class="row g-4">
+
+            <!-- PRIMA COLONNA: I Gruppi (Comunità) -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                    <h4 class="fw-bold text-dark mb-3">Comunità Musicali</h4>
+
+                    <!-- Form per creare una nuova comunità -->
+                    <div class="border rounded-3 p-3 mb-3 bg-light">
+                        <h6 class="fw-bold mb-2">Crea una Comunità</h6>
+                        <input type="text" id="comm-titolo" class="form-control form-control-sm mb-2"
+                            placeholder="Titolo comunità">
+                        <input type="text" id="comm-desc" class="form-control form-control-sm mb-2"
+                            placeholder="Descrizione">
+                        <input type="text" id="comm-tag" class="form-control form-control-sm mb-2"
+                            placeholder="Tag (es. rock, rap)">
+                        <button id="btn-crea-comunita" class="btn btn-success btn-sm w-100 fw-semibold">Crea
+                            Comunità</button>
+                    </div>
+
+                    <!-- Lista delle comunità esistenti (riempita da JS) -->
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <h6 class="fw-bold m-0">Esplora Comunità</h6>
+                        <button id="btn-carica-comunita" class="btn btn-outline-secondary btn-sm">Mostra</button>
+                    </div>
+                    <div id="comunita-lista" class="flex-grow-1 overflow-auto"></div>
+                </div>
+            </div>
+
+            <!-- SECONDA COLONNA: Bacheca e Condivisioni (Social) -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                    <h4 class="fw-bold text-dark mb-3">Condivisioni & Social</h4>
+
+                    <!-- Form per pubblicare una delle proprie playlist -->
+                    <div class="border rounded-3 p-3 mb-3 bg-light">
+                        <h6 class="fw-bold mb-2">Condividi una tua Playlist</h6>
+                        <input type="text" id="share-playlist-name" class="form-control form-control-sm mb-2"
+                            placeholder="Nome della tua playlist">
+                        <input type="text" id="share-comm-title" class="form-control form-control-sm mb-2"
+                            placeholder="Comunità di destinazione">
+                        <button id="btn-condividi" class="btn btn-success btn-sm w-100 fw-semibold">Condividi
+                            Playlist</button>
+                    </div>
+
+                    <!-- Caselle di testo per filtrare le playlist pubbliche -->
+                    <h6 class="fw-bold mb-2">Playlist Pubbliche nelle tue Comunità</h6>
+                    <div class="row g-2 mb-2">
+                        <div class="col-6">
+                            <input type="text" id="search-shared-tag" class="form-control form-control-sm"
+                                placeholder="Filtra Tag">
+                        </div>
+                        <div class="col-6">
+                            <input type="text" id="search-shared-song" class="form-control form-control-sm"
+                                placeholder="Filtra Canzone">
+                        </div>
+                    </div>
+                    <button id="btn-cerca-condivise" class="btn btn-secondary btn-sm w-100 mb-3">Cerca / Aggiorna
+                        Feed</button>
+
+                    <!-- Spazio dove JS inserirà i post con le playlist condivise e i commenti -->
+                    <div id="shared-playlist-list" class="flex-grow-1 overflow-auto"></div>
+                </div>
+            </div>
+
+            <!-- TERZA COLONNA: Playlist Private e Ricerca su Spotify -->
+            <div class="col-lg-4">
+                <div class="card border-0 shadow-sm rounded-4 h-100 p-3">
+                    <h4 class="fw-bold text-dark mb-3">Gestione Playlist e Ricerca Brani</h4>
+
+                    <!-- Form per creare una nuova playlist vuota -->
+                    <div class="border rounded-3 p-3 mb-3 bg-light">
+                        <h6 class="fw-bold mb-2">Crea Playlist</h6>
+                        <div class="input-group-sm mb-2">
+                            <input type="text" id="nuova-playlist" class="form-control mb-1"
+                                placeholder="Nome nuova playlist">
+                            <input type="text" id="nuova-playlist-desc" class="form-control mb-1"
+                                placeholder="Descrizione testuale">
+                            <input type="text" id="nuova-playlist-tag" class="form-control mb-2"
+                                placeholder="Tag descrittivi (es. rock, relax)">
+                            <button id="btn-crea-playlist" class="btn btn-dark w-100 btn-sm">Crea Playlist</button>
+                        </div>
+
+                        <!-- Campi per cercare su Spotify tramite le API -->
+                        <h6 class="fw-bold mb-2 mt-3">Cerca Brani su Spotify</h6>
+                        <div class="row g-2 mb-2">
+                            <div class="col-6">
+                                <input type="text" id="titolo" class="form-control form-control-sm"
+                                    placeholder="Titolo canzone">
+                            </div>
+                            <div class="col-6">
+                                <input type="text" id="autore" class="form-control form-control-sm"
+                                    placeholder="Nome artista">
+                            </div>
+                        </div>
+                        <button id="btn-cerca" class="btn btn-success btn-sm w-100 mb-2">Cerca su Spotify</button>
+
+                        <!-- JS scrive qui in automatico il nome della playlist appena creata per comodità -->
+                        <div class="mb-1">
+                            <label class="form-label small fw-semibold text-muted mb-1">Playlist di Destinazione per
+                                l'aggiunta:</label>
+                            <input type="text" id="nome-playlist-destinazione" class="form-control form-control-sm"
+                                placeholder="Nome della playlist a cui aggiungere i brani">
+                        </div>
+                    </div>
+
+                    <!-- Qui verranno mostrati i risultati trovati da Spotify -->
+                    <div class="mb-3">
+                        <h6 class="fw-bold mb-2">Risultati della Ricerca</h6>
+                        <div id="risultati-output" class="p-2 border rounded bg-white"
+                            style="max-height: 200px; overflow-y: auto;">
+                            <p class="text-muted small m-0">Nessuna ricerca effettuata.</p>
+                        </div>
+                    </div>
+
+                    <!-- Spazio per vedere le proprie playlist personali caricate dal localStorage -->
+                    <div>
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <h6 class="fw-bold m-0">Le Mie Playlist Private</h6>
+                            <button id="btn-mostra" class="btn btn-outline-dark btn-sm">Aggiorna</button>
+                        </div>
+                        <div id="playlist-output" class="overflow-auto" style="max-height: 250px;">
+                            <p class="text-muted small m-0">Nessuna playlist salvata.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Aggiungiamo gli script in fondo alla pagina per far caricare la grafica più velocemente -->
+    <!-- Script di Bootstrap per far funzionare i menu a tendina e i bottoni -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- I nostri file Javascript separati per le due parti del progetto -->
+    <script src="server.js"></script>
+    <script src="app.js"></script>
+</body>
+
+</html>
